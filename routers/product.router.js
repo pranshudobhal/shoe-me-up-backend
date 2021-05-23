@@ -7,7 +7,6 @@ const { getAllProducts, getProductById } = require('../controllers/product.contr
 
 
 router.get('/', getAllProducts);
-router.get('/:id', getProductById);
-
+router.get('/:productID', getProductById);
 
 module.exports = router;

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { Schema } = mongoose;
-const products = require('./product.data.js');
+const products = require('./product.data');
 
 const productSchema = new Schema({
   name: String,
@@ -15,7 +15,7 @@ const productSchema = new Schema({
   idealFor: String,
   level: String,
   color: String
-}) 
+})
 
 const Product = mongoose.model('Product', productSchema);
 
@@ -23,11 +23,11 @@ async function addProductsToCollection(){
   try{
     products.forEach(async (product) => {
       const newProduct = new Product(product);
-      const savedProduct = await newProduct.save();
-      console.log("Data added successfully");
+      await newProduct.save();
     })
+    res.json({ success: true, message: "Data added successfully to database" });
   } catch(error) {
-    console.log('Error adding data ', error)
+    res.json({ success: false, message: "Error adding data to database" });
   }
 }
 

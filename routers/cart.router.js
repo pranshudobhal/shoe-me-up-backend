@@ -6,11 +6,9 @@ const { Cart } = require('../models/cart.model');
 const { getAllProductsInCart, addProductInCart, updateProductInCart, deleteProductFromCart } = require('../controllers/cart.controller');
 
 
-router.get('/', getAllProductsInCart);
-router.post('/', addProductInCart);
-router.post('/:productID', updateProductInCart);
-router.delete('/:productID', deleteProductFromCart);
-
-
+router.get('/:userID', getAllProductsInCart);
+router.post('/:userID', addProductInCart);
+router.post('/:userID/:productID', updateProductInCart);
+router.delete('/:userID/:productID', deleteProductFromCart);
 
 module.exports = router;

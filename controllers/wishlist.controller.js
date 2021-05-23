@@ -1,16 +1,24 @@
 const { Wishlist } = require('../models/wishlist.model');
 
 const getAllProductsInWishlist = async (req, res) => {
+  const { userID } = req.params;
   try {
-    const wishlist = await Wishlist.find({});
-    res.json({ success: true, wishlist });
+    const wishlist = await Wishlist.findById(userID).populate('products._id');
+    const wishlistProducts = wishlist.products.map(productItem => {
+    return({ ...productItem._id._doc });
+    })
+
+    const finalWishlist = { _id: wishlist._id, products: wishlistProducts}
+
+    res.json({ success: true, wishlist: finalWishlist });
   } catch(error) {
     res.json({ success: false, message: "Error retrieving wishlist", errorMessage: error.message})
   }
 }
 
 const addProductInWishlist = async (req, res) => {
-  let { product, userID } = req.body;
+  const { userID } = req.params;
+  let { product } = req.body;
   try {
     const user = await Wishlist.findById(userID);
     if(!user) {
@@ -22,7 +30,7 @@ const addProductInWishlist = async (req, res) => {
       res.json({ success: true, message: "New wishlist created and product added", newWishlist})
     } else {
       const newProduct = { _id: product._id };
-      user.products.push(newProduct)
+      user.products.push(newProduct);
       await user.save();
       res.json({ success: true, message: "Product added to exisitng wishlist", user})
     }
@@ -32,8 +40,7 @@ const addProductInWishlist = async (req, res) => {
 }
 
 const deleteProductFromWishlist = async (req, res) => {
-  let { userID } = req.body;
-  const { productID } = req.params;
+  const { productID, userID } = req.params;
   
   try {
     const user = await Wishlist.findById(userID);
