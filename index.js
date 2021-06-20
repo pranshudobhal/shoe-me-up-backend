@@ -3,15 +3,15 @@ require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-const productRouter = require('./routers/product.router.js');
-const cartRouter = require('./routers/cart.router.js');
-const wishlistRouter = require('./routers/wishlist.router.js');
+const productRouter = require('./routers/product.router');
+const cartRouter = require('./routers/cart.router');
+const wishlistRouter = require('./routers/wishlist.router');
 const loginRouter = require('./routers/login.router');
 const signupRouter = require('./routers/signup.router');
 const userRouter = require('./routers/user.router');
 
-const { connectToDatabase } = require('./database/database.js');
-const { addProductsToCollection } = require('./models/product.model.js');
+const { connectToDatabase } = require('./database/database');
+const { addProductsToCollection } = require('./models/product.model');
 
 const port = process.env.PORT;
 const app = express();

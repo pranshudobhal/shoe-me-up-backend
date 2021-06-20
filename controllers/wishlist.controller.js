@@ -1,49 +1,56 @@
 const { Wishlist } = require('../models/wishlist.model');
 
 const getAllProductsInWishlist = async (req, res) => {
+  const { userID } = req.params;
   try {
-    const wishlist = await Wishlist.find({});
-    res.json({ success: true, wishlist });
-  } catch(error) {
-    res.json({ success: false, message: "Error retrieving wishlist", errorMessage: error.message})
+    const wishlist = await Wishlist.findById(userID).populate('products._id');
+    const wishlistProducts = wishlist.products.map((productItem) => {
+      return { ...productItem._id._doc };
+    });
+
+    const finalWishlist = { _id: wishlist._id, products: wishlistProducts };
+
+    res.json({ success: true, wishlist: finalWishlist });
+  } catch (error) {
+    res.json({ success: false, message: 'Error retrieving wishlist', errorMessage: error.message });
   }
-}
+};
 
 const addProductInWishlist = async (req, res) => {
-  let { product, userID } = req.body;
+  const { userID } = req.params;
+  let { product } = req.body;
   try {
     const user = await Wishlist.findById(userID);
-    if(!user) {
+    if (!user) {
       const newWishlist = new Wishlist({
         _id: userID,
-        products: [{ _id: product._id }]
-      })
+        products: [{ _id: product._id }],
+      });
       await newWishlist.save();
-      res.json({ success: true, message: "New wishlist created and product added", newWishlist})
+      res.json({ success: true, message: 'New wishlist created and product added', newWishlist });
     } else {
       const newProduct = { _id: product._id };
-      user.products.push(newProduct)
+      user.products.push(newProduct);
       await user.save();
-      res.json({ success: true, message: "Product added to exisitng wishlist", user})
+      res.json({ success: true, message: 'Product added to exisitng wishlist', user });
     }
-  } catch(error) {
-    res.json({ success: false, message: "Error adding product to wishlist", errorMessage: error.message})
+  } catch (error) {
+    res.json({ success: false, message: 'Error adding product to wishlist', errorMessage: error.message });
   }
-}
+};
 
 const deleteProductFromWishlist = async (req, res) => {
-  let { userID } = req.body;
-  const { productID } = req.params;
-  
+  const { productID, userID } = req.params;
+
   try {
     const user = await Wishlist.findById(userID);
     await user.products.remove(productID);
     await user.save();
-   
-    res.json({ success: true, user })
-  } catch(error) {
-    res.json({ success: false, message: "Error deleting product from wishlist", errorMessage: error.message})
-  }
-}
 
-module.exports = { getAllProductsInWishlist, addProductInWishlist, deleteProductFromWishlist }
+    res.json({ success: true, user });
+  } catch (error) {
+    res.json({ success: false, message: 'Error deleting product from wishlist', errorMessage: error.message });
+  }
+};
+
+module.exports = { getAllProductsInWishlist, addProductInWishlist, deleteProductFromWishlist };
