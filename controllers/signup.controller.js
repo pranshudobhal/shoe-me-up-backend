@@ -2,6 +2,8 @@ const { User } = require('../models/user.model');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const { Wishlist } = require('../models/wishlist.model');
+const { Cart } = require('../models/cart.model');
 
 const createNewUser = async (req, res) => {
   try {
@@ -22,10 +24,23 @@ const createNewUser = async (req, res) => {
         password: hashedPassword,
       });
 
+      const newCart = new Cart({
+        _id: newUser._id,
+        products: [],
+      });
+
+      const newWishlist = new Wishlist({
+        _id: newUser._id,
+        products: [],
+      });
+
       const token = jwt.sign({ userID: newUser._id }, process.env.SECRET, { expiresIn: '24h' });
 
       await newUser.save();
-      return res.status(201).json({ success: true, message: 'User created!', token });
+      await newCart.save();
+      await newWishlist.save();
+
+      res.status(201).json({ success: true, message: 'User created!', token });
     }
   } catch (error) {
     res.json({ success: false, message: 'Error creating new user!', errorMessage: error.message });

@@ -1,8 +1,9 @@
 const { Cart } = require('../models/cart.model');
 
 const getAllProductsInCart = async (req, res) => {
-  const { userID } = req.params;
   try {
+    const { userID } = req.user;
+
     const cart = await Cart.findById(userID).populate('products._id');
     const cartProducts = cart.products.map((productItem) => {
       return { ...productItem._id._doc, qty: productItem.qty };
@@ -17,9 +18,10 @@ const getAllProductsInCart = async (req, res) => {
 };
 
 const addProductInCart = async (req, res) => {
-  const { userID } = req.params;
-  let { product } = req.body;
   try {
+    const { userID } = req.user;
+    let { product } = req.body;
+
     const user = await Cart.findById(userID);
     if (!user) {
       const newCart = new Cart({
@@ -40,10 +42,11 @@ const addProductInCart = async (req, res) => {
 };
 
 const updateProductInCart = async (req, res) => {
-  let { qty } = req.body;
-  const { productID, userID } = req.params;
-
   try {
+    let { qty } = req.body;
+    const { userID } = req.user;
+    const { productID } = req.params;
+
     const user = await Cart.findById(userID);
     const product = user.products.map((product) => {
       if (product.id === productID) {
@@ -59,9 +62,10 @@ const updateProductInCart = async (req, res) => {
 };
 
 const deleteProductFromCart = async (req, res) => {
-  const { userID, productID } = req.params;
-
   try {
+    const { productID } = req.params;
+    const { userID } = req.user;
+
     const user = await Cart.findById(userID);
     await user.products.remove(productID);
     await user.save();

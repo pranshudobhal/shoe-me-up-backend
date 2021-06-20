@@ -26,6 +26,10 @@ connectToDatabase();
 // Run once when DB is empty
 // addProductsToCollection();
 
+app.get('/', (req, res) => {
+  res.json({ success: true, message: 'ShoeMeUp API' });
+});
+
 app.use('/login', loginRouter);
 app.use('/signup', signupRouter);
 app.use('/products', productRouter);
@@ -34,10 +38,6 @@ app.use(verifyAuth);
 app.use('/cart', cartRouter);
 app.use('/wishlist', wishlistRouter);
 app.use('/user', userRouter);
-
-app.get('/', (req, res) => {
-  res.json({ success: true, message: 'ShoeMeUp API' });
-});
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route does not exist!!!' });

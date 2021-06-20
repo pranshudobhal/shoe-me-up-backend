@@ -1,8 +1,8 @@
 const { Wishlist } = require('../models/wishlist.model');
 
 const getAllProductsInWishlist = async (req, res) => {
-  const { userID } = req.params;
   try {
+    const { userID } = req.user;
     const wishlist = await Wishlist.findById(userID).populate('products._id');
     const wishlistProducts = wishlist.products.map((productItem) => {
       return { ...productItem._id._doc };
@@ -17,9 +17,10 @@ const getAllProductsInWishlist = async (req, res) => {
 };
 
 const addProductInWishlist = async (req, res) => {
-  const { userID } = req.params;
-  let { product } = req.body;
   try {
+    const { userID } = req.user;
+    let { product } = req.body;
+
     const user = await Wishlist.findById(userID);
     if (!user) {
       const newWishlist = new Wishlist({
@@ -40,9 +41,10 @@ const addProductInWishlist = async (req, res) => {
 };
 
 const deleteProductFromWishlist = async (req, res) => {
-  const { productID, userID } = req.params;
-
   try {
+    const { productID } = req.params;
+    const { userID } = req.user;
+
     const user = await Wishlist.findById(userID);
     await user.products.remove(productID);
     await user.save();

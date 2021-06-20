@@ -15,7 +15,7 @@ const loginUser = async (req, res) => {
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      res.status(401).json({ success: false, message: 'Error logging in!!!' });
+      return res.status(401).json({ success: false, message: 'Error logging in!!!' });
     }
 
     const token = jwt.sign({ userID: user._id }, process.env.SECRET, { expiresIn: '24h' });
