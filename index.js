@@ -9,6 +9,7 @@ const wishlistRouter = require('./routers/wishlist.router');
 const loginRouter = require('./routers/login.router');
 const signupRouter = require('./routers/signup.router');
 const userRouter = require('./routers/user.router');
+const paymentRouter = require('./routers/payment.router');
 
 const { connectToDatabase } = require('./database/database');
 const { addProductsToCollection } = require('./models/product.model');
@@ -38,6 +39,7 @@ app.use(verifyAuth);
 app.use('/cart', cartRouter);
 app.use('/wishlist', wishlistRouter);
 app.use('/user', userRouter);
+app.use('/payment', paymentRouter);
 
 app.use((req, res) => {
   res.status(404).json({ success: false, message: 'Route does not exist!!!' });

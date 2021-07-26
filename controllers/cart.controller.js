@@ -75,4 +75,16 @@ const deleteProductFromCart = async (req, res) => {
   }
 };
 
-module.exports = { getAllProductsInCart, addProductInCart, updateProductInCart, deleteProductFromCart };
+const clearCart = async (req, res) => {
+  try {
+    const { userID } = req.user;
+
+    await Cart.updateOne({ _id: userID }, { $set: { products: [] } });
+
+    res.json({ success: true });
+  } catch (error) {
+    res.json({ success: false, message: 'Error clearing cart', errorMessage: error.message });
+  }
+};
+
+module.exports = { getAllProductsInCart, addProductInCart, updateProductInCart, deleteProductFromCart, clearCart };
