@@ -6,15 +6,10 @@ const productSchema = new Schema({
   name: String,
   image: String,
   price: Number,
-  material: String,
+  description: String,
   brand: String,
   inStock: Boolean,
   fastDelivery: Boolean,
-  ratings: Number,
-  offer: String,
-  idealFor: String,
-  level: String,
-  color: String,
 });
 
 const Product = mongoose.model('Product', productSchema);
