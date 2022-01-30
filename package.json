@@ -1,0 +1,33 @@
+{
+  "name": "shoe-me-up-backend",
+  "version": "1.0.0",
+  "description": "Backend for ShoeMeUp app",
+  "main": "index.js",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "faker": "^5.5.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^5.12.14",
+    "mongoose-type-email": "^1.1.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": "node index",
+    "dev": "nodemon index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pranshudobhal/shoe-me-up-backend.git"
+  },
+  "author": "Pranshu Dobhal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pranshudobhal/shoe-me-up-backend/issues"
+  },
+  "homepage": "https://github.com/pranshudobhal/shoe-me-up-backend#readme"
+}
